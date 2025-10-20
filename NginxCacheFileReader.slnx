@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="NginxCacheFileReader.Tests/NginxCacheFileReader.Tests.csproj" />
+  <Project Path="NginxCacheFileReader/NginxCacheFileReader.csproj" />
+</Solution>

@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "DebugLocal": {
+      "commandName": "Project",
+      "commandLineArgs": "--cache-path /tmp/cachefiles --db-path /tmp/nginx_cache.db --paths-channel-capacity 100 --items-channel-capacity 100 --degree-of-parallelism 2 --sql-batch-size 3 --progress-modulo 10"
+    },
+    "ProCache": {
+      "commandName": "Project",
+      "commandLineArgs": "--CachePath /var/cache/nginx --db-path /tmp/nginx_cache.db --paths-channel-capacity 100 --items-channel-capacity 100 --degree-of-parallelism 4 --sql-batch-size 1000 --progress-modulo 10000"
+    }
+  }
+}
