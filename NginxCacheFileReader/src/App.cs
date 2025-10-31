@@ -23,7 +23,7 @@ public class App : BackgroundService
 		_serviceProvider = serviceProvider;
 		_args = args.Value;
 
-		_logger.LogInformation("{Args}", _args);
+		_logger.LogDebug("{Args}", _args);
 	}
 
 	protected override async Task ExecuteAsync(CancellationToken cancellationToken)
@@ -31,7 +31,7 @@ public class App : BackgroundService
 		try
 		{
 			var countFiles = CountFiles(_args.CachePath);
-			_logger.LogInformation("number of cache files {Count}", countFiles);
+			_logger.LogDebug("number of cache files {Count}", countFiles);
 
 			var pathsChannel = Channel.CreateBounded<string>(new BoundedChannelOptions(_args.PathsChannelCapacity)
 			{
@@ -68,10 +68,10 @@ public class App : BackgroundService
 			}
 			catch (OperationCanceledException)
 			{
-				_logger.LogInformation("Operation was cancelled.");
+				_logger.LogDebug("Operation was cancelled.");
 			}
 
-			_logger.LogInformation("All tasks completed.");
+			_logger.LogDebug("All tasks completed.");
 			_lifetime.StopApplication();
 
 		}
@@ -119,7 +119,7 @@ public class App : BackgroundService
 		}
 		finally
 		{
-			_logger.LogInformation("pathsChannel Complete");
+			_logger.LogDebug("pathsChannel Complete");
 			pathsChannel.Writer.Complete();
 		}
 	}
@@ -171,11 +171,11 @@ public class App : BackgroundService
 		}
 		catch (OperationCanceledException)
 		{
-			_logger.LogInformation("ProduceCacheItems was cancelled.");
+			_logger.LogDebug("ProduceCacheItems was cancelled.");
 		}
 		finally
 		{
-			_logger.LogInformation("itemsChannel Complete");
+			_logger.LogDebug("itemsChannel Complete");
 			itemsChannel.Writer.Complete();
 		}
 	}

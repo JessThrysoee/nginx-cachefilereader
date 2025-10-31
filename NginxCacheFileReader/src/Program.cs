@@ -63,6 +63,13 @@ var progressModuloOption = new Option<int>("--progress-modulo")
 	DefaultValueFactory = _ => 10000
 };
 
+var logLevelOption = new Option<LogLevel>("--log-level")
+{
+	Description = "Logging level (Trace|Debug|Information|Warning|Error|Critical|None)",
+	Arity = ArgumentArity.ExactlyOne,
+	DefaultValueFactory = _ => LogLevel.Information
+};
+
 rootCommand.Add(cachePathOption);
 rootCommand.Add(dbPathOption);
 rootCommand.Add(includeHttpHeadersOption);
@@ -72,6 +79,7 @@ rootCommand.Add(pathsChannelCapacityOption);
 rootCommand.Add(itemsChannelCapacityOption);
 rootCommand.Add(sqlBatchSizeOption);
 rootCommand.Add(progressModuloOption);
+rootCommand.Add(logLevelOption);
 ExtraHelpAction.AddToRootCommand(rootCommand);
 
 rootCommand.SetAction(async (ParseResult parseResult, CancellationToken cancellationToken) =>
@@ -86,6 +94,8 @@ rootCommand.SetAction(async (ParseResult parseResult, CancellationToken cancella
 	var sqlBatchSize = parseResult.GetValue(sqlBatchSizeOption);
 	var progressModulo = parseResult.GetValue(progressModuloOption);
 
+	var logLevel = parseResult.GetValue(logLevelOption);
+
 	var builder = Host.CreateApplicationBuilder();
 
 	builder.Services.Configure<Args>(options =>
@@ -99,14 +109,16 @@ rootCommand.SetAction(async (ParseResult parseResult, CancellationToken cancella
 		options.ItemsChannelCapacity = itemsChannelCapacity;
 		options.SqlBatchSize = sqlBatchSize;
 		options.ProgressModulo = progressModulo;
+		options.LogLevel = logLevel;
 	});
 
 	builder.Services.AddDbContext<NginxCacheContext>(o => o
 		.UseSqlite($"DataSource={dbPath};Foreign Keys=true")
 		.UseSnakeCaseNamingConvention());
 
-	builder.Logging.AddFilter("Microsoft.*", LogLevel.Warning);
 	builder.Logging.ClearProviders();
+	builder.Logging.SetMinimumLevel(logLevel);
+	builder.Logging.AddFilter("Microsoft.*", LogLevel.Warning);
 	builder.Logging.AddSimpleConsole(o =>
 	{
 		o.IncludeScopes = true;
@@ -145,5 +157,6 @@ namespace NginxCacheFileReader
 		public int ItemsChannelCapacity { get; set; }
 		public int SqlBatchSize { get; set; }
 		public int ProgressModulo { get; set; }
+		public LogLevel LogLevel { get; set; }
 	}
 }

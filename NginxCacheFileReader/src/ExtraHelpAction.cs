@@ -18,6 +18,7 @@ internal class ExtraHelpAction : SynchronousCommandLineAction
 		  nginx-cachefilereader --help
 		  nginx-cachefilereader --cache-path /var/cache/nginx --db-path /tmp/nginx_cache.db
 		  nginx-cachefilereader --cache-path /var/cache/nginx --db-path /tmp/nginx_cache.db --sql-batch-size 10000 --progress-modulo 10000
+		  nginx-cachefilereader --cache-path /var/cache/nginx --db-path /tmp/nginx_cache.db --log-level Debug
 
 		Usage Database::
 
