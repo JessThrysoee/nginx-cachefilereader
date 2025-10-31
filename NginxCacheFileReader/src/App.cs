@@ -82,7 +82,6 @@ public class App : BackgroundService
 		}
 	}
 
-
 	int CountFiles(string cachePath)
 	{
 		int count = 0;
@@ -95,7 +94,6 @@ public class App : BackgroundService
 
 		return count;
 	}
-
 
 	async Task ProduceFilePaths(
 		Channel<string> pathsChannel,
@@ -218,7 +216,6 @@ public class App : BackgroundService
 		var finalElapsed = stopwatch.Elapsed;
 		_logger.LogInformation("{Count} (final elapsed: {Elapsed:mm\\:ss\\.fff})", count, finalElapsed);
 	}
-
 
 	async Task Insert(List<CacheItem> items, CancellationToken ct)
 	{

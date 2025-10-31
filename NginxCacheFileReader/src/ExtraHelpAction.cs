@@ -2,25 +2,19 @@ using System.CommandLine;
 using System.CommandLine.Help;
 using System.CommandLine.Invocation;
 
-internal class ExtraHelpAction : SynchronousCommandLineAction
+internal class ExtraHelpAction(HelpAction action) : SynchronousCommandLineAction
 {
-	private readonly HelpAction _defaultHelp;
-
-	public ExtraHelpAction(HelpAction action) => _defaultHelp = action;
-
 	public override int Invoke(ParseResult parseResult)
 	{
-		int result = _defaultHelp.Invoke(parseResult);
+		int result = action.Invoke(parseResult);
 
 		Console.WriteLine("""
-		Usage Command:
+		Example command usage:
 
 		  nginx-cachefilereader --help
-		  nginx-cachefilereader --cache-path /var/cache/nginx --db-path /tmp/nginx_cache.db
-		  nginx-cachefilereader --cache-path /var/cache/nginx --db-path /tmp/nginx_cache.db --sql-batch-size 10000 --progress-modulo 10000
 		  nginx-cachefilereader --cache-path /var/cache/nginx --db-path /tmp/nginx_cache.db --log-level Debug
 
-		Usage Database::
+		Example database usage:
 
 		  * Delete all cache items with status greater than or equal to 500
 
@@ -30,7 +24,6 @@ internal class ExtraHelpAction : SynchronousCommandLineAction
 		""");
 
 		return result;
-
 	}
 
 	public static void AddToRootCommand(RootCommand rootCommand)

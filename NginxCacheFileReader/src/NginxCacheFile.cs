@@ -13,11 +13,11 @@ public class NginxCacheFile
 	private static readonly RecyclableMemoryStreamManager _memoryStreamManager = new();
 	private static readonly ArrayPool<byte> _bytesArrayPool = ArrayPool<byte>.Shared;
 
-
-	public static async Task<CacheItem?> ReadAsync(string path,
-												bool includeHttpHeaders = false,
-												bool includeBodyFileSignature = false,
-												CancellationToken cancellationToken = default)
+	public static async Task<CacheItem?> ReadAsync(
+		string path,
+		bool includeHttpHeaders = false,
+		bool includeBodyFileSignature = false,
+		CancellationToken cancellationToken = default)
 	{
 		SafeFileHandle? fileHandle = null;
 		try

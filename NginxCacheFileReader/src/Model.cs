@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace NginxCacheFileReader;
 
-
 public class NginxCacheContext(DbContextOptions<NginxCacheContext> options) : DbContext(options)
 {
 	public DbSet<CacheItem> CacheItems { get; set; }
@@ -31,7 +30,6 @@ public class BloggingContextFactory : IDesignTimeDbContextFactory<NginxCacheCont
 	}
 }
 
-
 public class CacheItem
 {
 	public int CacheItemId { get; set; }
@@ -46,7 +44,6 @@ public class CacheItem
 	public List<HttpHeader> HttpHeaders { get; set; } = [];
 }
 
-
 public class HttpHeader
 {
 	public HttpHeader() { }
@@ -59,7 +56,6 @@ public class HttpHeader
 	public int CacheItemId { get; set; }
 	public CacheItem CacheItem { get; set; } = default!;
 }
-
 
 public class CacheItemHeader
 {

@@ -39,18 +39,6 @@ var degreeOfParallelismOption = new Option<int>("--degree-of-parallelism")
 	DefaultValueFactory = _ => 16
 };
 
-var pathsChannelCapacityOption = new Option<int>("--paths-channel-capacity")
-{
-	Description = "Capacity of the paths channel buffer",
-	DefaultValueFactory = _ => 256
-};
-
-var itemsChannelCapacityOption = new Option<int>("--items-channel-capacity")
-{
-	Description = "Capacity of the items channel buffer",
-	DefaultValueFactory = _ => 256
-};
-
 var sqlBatchSizeOption = new Option<int>("--sql-batch-size")
 {
 	Description = "Number of items to batch before writing to database",
@@ -75,28 +63,27 @@ rootCommand.Add(dbPathOption);
 rootCommand.Add(includeHttpHeadersOption);
 rootCommand.Add(includeBodyFileSignatureOption);
 rootCommand.Add(degreeOfParallelismOption);
-rootCommand.Add(pathsChannelCapacityOption);
-rootCommand.Add(itemsChannelCapacityOption);
 rootCommand.Add(sqlBatchSizeOption);
 rootCommand.Add(progressModuloOption);
 rootCommand.Add(logLevelOption);
 ExtraHelpAction.AddToRootCommand(rootCommand);
 
-rootCommand.SetAction(async (ParseResult parseResult, CancellationToken cancellationToken) =>
+rootCommand.SetAction(async (parseResult, cancellationToken) =>
 {
 	var cachePath = parseResult.GetValue(cachePathOption)!;
 	var dbPath = parseResult.GetValue(dbPathOption)!;
 	var includeHttpHeaders = parseResult.GetValue(includeHttpHeadersOption);
 	var includeBodyFileSignature = parseResult.GetValue(includeBodyFileSignatureOption);
 	var degreeOfParallelism = parseResult.GetValue(degreeOfParallelismOption);
-	var pathsChannelCapacity = parseResult.GetValue(pathsChannelCapacityOption);
-	var itemsChannelCapacity = parseResult.GetValue(itemsChannelCapacityOption);
 	var sqlBatchSize = parseResult.GetValue(sqlBatchSizeOption);
 	var progressModulo = parseResult.GetValue(progressModuloOption);
 
 	var logLevel = parseResult.GetValue(logLevelOption);
 
 	var builder = Host.CreateApplicationBuilder();
+
+	const int pathsChannelCapacity = 256;
+	const int itemsChannelCapacity = 256;
 
 	builder.Services.Configure<Args>(options =>
 	{
@@ -143,20 +130,3 @@ rootCommand.SetAction(async (ParseResult parseResult, CancellationToken cancella
 
 return await rootCommand.Parse(args).InvokeAsync();
 
-
-namespace NginxCacheFileReader
-{
-	public record Args
-	{
-		public string CachePath { get; set; } = default!;
-		public string DbPath { get; set; } = default!;
-		public bool IncludeHttpHeaders { get; set; }
-		public bool IncludeBodyFileSignature { get; set; }
-		public int DegreeOfParallelism { get; set; }
-		public int PathsChannelCapacity { get; set; }
-		public int ItemsChannelCapacity { get; set; }
-		public int SqlBatchSize { get; set; }
-		public int ProgressModulo { get; set; }
-		public LogLevel LogLevel { get; set; }
-	}
-}
