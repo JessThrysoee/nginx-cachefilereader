@@ -1,0 +1,28 @@
+---
+name: Build and Push
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions: { contents: write }
+    strategy:
+      matrix:
+        rid: ["linux-x64"]
+    steps:
+      - uses: go-task/setup-task@v1
+
+      - uses: actions/setup-dotnet@v5
+        with: { dotnet-quality: ga, dotnet-version: 9 }
+
+      - uses: actions/checkout@v5
+
+      - name: build
+        run: RID=${{ matrix.rid }} task build
+
+      - name: Add binary to release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: build/*

@@ -1,0 +1,21 @@
+# https://taskfile.dev
+---
+version: "3"
+
+tasks:
+  build:
+    env:
+      RID: linux-x64
+    cmd: |
+      dotnet publish NginxCacheFileReader/NginxCacheFileReader.csproj \
+        -c Release \
+        -r ${RID} \
+        -p:PublishSingleFile=true \
+        -p:EnableCompressionInSingleFile=true \
+        -p:IncludeNativeLibrariesForSelfExtract=true \
+        -p:DebugType=None \
+        -p:DebugSymbols=false \
+        -p:AssemblyName=nginx-cachefilereader-${RID} \
+        --self-contained \
+        -o build/
+
